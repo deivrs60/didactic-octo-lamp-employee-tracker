@@ -106,5 +106,18 @@ const init = () => {
     );
 }
 
+// sql queries to show database tables depending on user selection from switch above
+
+// DEPARTMENT TABLE
+const viewDepartments = () => {
+    db.query(`SELECT * FROM department;`, 
+        (err, result) => {
+            if(err) console.log(err)
+            console.log('\n')
+            console.table(result)
+        }
+    )
+}
+
 
 init();
