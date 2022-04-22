@@ -1,5 +1,6 @@
 const db = require('./db/connection');
 const inquirer = require('inquirer');
+const { allowedNodeEnvironmentFlags } = require('process');
 
 
 // declaring the variables 
@@ -43,3 +44,67 @@ db.query(`SELECT * FROM employees;`, (err, res) => {
     employeeIds = res;
 })
 }
+
+
+/////// begin command line app
+
+
+const init = () => {
+    runQueries;
+
+    // prompt user response to begin 
+    let message = 'What would you like to do?';
+    let choices = [
+        'View departments',
+        'View roles',
+        'View employees',
+        'Add a department',
+        'Add a role',
+        'Add an employee',
+        "Exit"
+    ];
+
+    // begin using inquirer 
+    inquirer.prompt( 
+        {
+            type: 'list',
+            name: 'choice',
+            message: message,
+            choices: choices
+        }
+        ).then((promptChoice) => {
+            switch(promptChoice.choice) {
+                case "View departments":
+                    viewDepartments();
+                    init();
+                    break;
+                case "View roles":
+                    viewRoles();
+                    init();
+                    break;
+                case "View employees":
+                    viewEmployees();
+                    init();
+                    break;
+                case "Add a department":
+                    AddDepartment();
+                    init();
+                    break;
+                case "Add a role":
+                    addRole();
+                    init;
+                    break;
+                case "Add an employee":
+                    addEmployee();
+                    init;
+                    break;
+                case "Exit":
+                    console.log("Thank you for using the Employee Tracker. Press Ctrl + C to return to the terminal.");
+                    break;
+            }
+        }
+    );
+}
+
+
+init();

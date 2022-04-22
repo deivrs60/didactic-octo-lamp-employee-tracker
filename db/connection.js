@@ -7,14 +7,13 @@ require('dotenv').config();
 const db = mysql.createConnection (
     {
         host: 'localhost',
-        user: process.env.DB_USER,
-        password: process.env.DB_PW,
-        database: process.env.DB_NAME
+        user: 'root',
+        password: 'writePassword',
+        database: 'tracker'
 
     },
 
-    console.log(process.env),
-    console.log(`Connected to the ${process.env.DV_NAME} database.`)
+    console.log(`Connected to the "Tracker" database.`)
     )
     
     db.connect(err => {
