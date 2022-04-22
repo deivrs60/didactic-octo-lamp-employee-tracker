@@ -121,7 +121,8 @@ const viewDepartments = () => {
 
 // ROLE TABLE 
 const viewRoles = () => {
-    db.query(`SELECT role.title, role.id, department.name, role.salary 
+    db.query(`
+    SELECT role.title, role.id, department.name, role.salary 
     FROM role
     LEFT JOIN department ON role.department_id = department.id;`,
         (err, result) => {
@@ -132,10 +133,19 @@ const viewRoles = () => {
     )
 };
 
-// id INT AUTO_INCREMENT PRIMARY KEY,
-// title VARCHAR(30) NOT NULL,
-// salary DECIMAL NOT NULL,
-// department_id INT,
-
+// EMPLOYEES TABLE 
+const viewEmployees = () => {
+    db.query(`
+    SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, m.first_name AS manager_first_name, m.last_name AS manager_last_name FROM employee
+    LEFT JOIN role ON employee.role_id = role.id
+    LEFT JOIN department on role.department_id = department.id
+    LEFT JOIN employee m ON employee.manager_id = m.id;`,
+        (err, result) => {
+            if(err) console.log(err)
+            console.log('\n')
+            console.table(result)
+        }
+    )
+};
 
 init();
