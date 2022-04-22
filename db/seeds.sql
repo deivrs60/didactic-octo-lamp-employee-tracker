@@ -14,7 +14,7 @@ INSERT INTO role (id, title, salary, department_id)
         (DEFAULT, 'HEAD OF HUMAN RESOURCES', 12500000, 2),
         (DEFAULT, 'CHIEF FINANCIAL OFFICER', 15000000, 3),
         (DEFAULT, 'CHIEF OPERATIONS OFFICER', 20000000, 4),
-        (DEFAULT, 'HEAD OF RECRUITING', 13000000, 5);
+        (DEFAULT, 'HEAD OF RECRUITING', 13000000, 4);
 
 
 -- populate the employee data with this seed data 
@@ -25,4 +25,4 @@ INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
         (DEFAULT, 'Mel', 'Rivas', 3, 2),
         (DEFAULT, 'Yorj', 'Felix', 4, 3),
         (DEFAULT, 'Gabe', 'Guzman', 5, 4),
-        (DEFAULT, 'Raven', 'Oliphant', 6, 5);
+        (DEFAULT, 'Raven', 'Oliphant', 5, 4);

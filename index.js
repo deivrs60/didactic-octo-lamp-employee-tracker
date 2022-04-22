@@ -148,4 +148,31 @@ const viewEmployees = () => {
     )
 };
 
+// add new department to department table
+function addDepartment () {
+    inquirer.prompt(
+        {
+            type: 'input',
+            name: 'addDepartment',
+            message: 'Please enter the name of the Department you would like to add. (30 character limit)',
+            vaildate: input => {
+                if(input) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid Department name.')
+                    return false;
+                }
+            }
+        }
+    ).then((data) => {
+        sql =  `INSERT INTO department
+                VAUES (DEFAULT, '${data.addDepartment}');`
+        db.sql(sql, (err, res) => {
+            if(err) console.log(err)
+        });
+        console.log(`${data.addDepartment} department added to the database.`)
+        init();
+    })
+}
+
 init();
