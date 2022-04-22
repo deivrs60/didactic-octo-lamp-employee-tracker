@@ -1,21 +1,20 @@
 const db = require('./db/connection');
 const inquirer = require('inquirer');
-const { allowedNodeEnvironmentFlags } = require('process');
 
 
 // declaring the variables 
-let department = ['None']
+let department = ['None'];
 let employeeArr = ['None'];
 let employeeIds = [];
 let role = [];
 let roleInfo = [];
-// let roleId;
-// let managerId = null;
+let roleId;
+let managerId = null;
 
 // run the prep queries 
 function runQueries() {
     department = ['None'];
-    role = [];
+    role = ['None'];
     employeeArr = ['None'];
     employeeIds = [];
 
@@ -61,6 +60,7 @@ const init = () => {
         'Add a department',
         'Add a role',
         'Add an employee',
+        'Update an Employee Role',
         "Exit"
     ];
 
@@ -94,6 +94,9 @@ const init = () => {
                     break;
                 case "Add an employee":
                     addEmployee();
+                    break;
+                case "Update an employee role":
+                    updateEmployee();
                     break;
                 case "Exit":
                     console.log("Thank you for using the Employee Tracker. Press Ctrl + C to return to the terminal.");
@@ -170,6 +173,169 @@ function addDepartment () {
         console.log(`${data.addDepartment} department added to the database.`)
         init();
     })
+}
+
+// add new role to the role table
+function addRole() {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Please enter the name of the Role you would like to add. (30 char limit)',
+            validate: input => {
+                if(input) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid role name.')
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'number',
+            name: 'salary',
+            message: 'Enter an annual salary for the role. (Only digits may be entered.)',
+            validate: input => {
+                if(input) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid response.')
+                    return false;
+
+                }
+            }
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: 'Please choose a department to add this role to.',
+            choices: department
+        }
+    ]).then((data) => {
+        let departmentId  = null;
+        db.query( `SELECT * FROM department `, (err, res) => {
+            if(err) console.log(err)
+            res.forEach( element => {
+                if(element.name === data.department) {
+                    departmentId = element.department_id
+                    return;
+                }
+            })  
+            sql = ` INSERT INTO role VALUES (DEFAULT, '${data.title}', ${data.salary}, '${departmentId}'); `
+            db.query(sql, (err, res) => {
+                if(err) console.log(err)
+            });
+            console.log(`${data.title} role has been added to the database.`)
+            init();
+        }) 
+    })
+}
+
+
+// function to add new employee(s)
+function addEmployee () {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'Enter the first name of the Employee you want to add. (30 char limit)',
+            validate: input => {
+                if(input) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid first name.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'Enter the last name of the employee you would like to add. (30 char limit)',
+            validate: input => {
+                if(input) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid last name.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: 'Please select the employees role.',
+            choices: role
+        },
+        {   type: 'list', 
+            name: 'manager',
+            message: 'Who is this employees manager.',
+            choices: employeeArr
+        }
+    ]).then((data) => {
+        roleInfo.forEach(element => {
+            switch(data.role) {
+                case element.title:
+                    roleId = element.roleId
+                    break;
+            }
+        })
+        employeeIds.forEach(element => {
+            if(element.first_name + ' ' + element.last_name === data.manager) {
+                managerId = element.id;
+                return;
+            }
+        })
+        sql =  `INSERT INTO employee VALUES (DEFAULT, '${data.firstName}', '${data.lastName}', '${roleId}', '${managerId}');`
+        db.query(sql, (err, res) => {
+            if(err) console.log(err)
+        });
+        console.log(`${data.role} role added to the database.`)
+        init();
+    })
+}
+
+function updateEmployee() {
+    let employeeIdUpdate;
+
+    return inquirer.prompt([ 
+        {
+            type: 'list',
+            name: 'employeeUpdate',
+            message: 'Which employee would you like to update?',
+            choices: employeeArr
+        },
+        {
+            type: 'list',
+            name: 'newRole',
+            message: 'Please choose the employees new role.',
+            choices: role
+        }
+    ]).then(data => {
+        roleInfo.forEach(element => {
+            switch (data.newRole) {
+                case element.title:
+                    roleId = element.id
+                    break;
+            }
+        })
+
+        employeeIds.forEach(element => {
+            let caseString = element.first_name + ' ' + element.last_name;
+            switch (data.employeeUpdate) {
+                case (caseString) :
+                    employeeUpdate = element.id;
+                    break;
+            }
+        })
+        sql = `UPDATE employee set id = '${roleId}' WHERE id = ${employeeIdUpdate};`
+        db.query(sql, (err, res) => {
+            if(err) console.log(err) 
+        });
+        console.log(`${data.employeeUpdate} role updated to ${data.newRole} and added to the database.`)
+    })
+
+    
 }
 
 init();
