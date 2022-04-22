@@ -119,5 +119,23 @@ const viewDepartments = () => {
     )
 }
 
+// ROLE TABLE 
+const viewRoles = () => {
+    db.query(`SELECT role.id, role.title, role.salary 
+    FROM role
+    LEFT JOIN department ON role.department_id = department.id;`,
+        (err, result) => {
+            if(err) console.log(err)
+            console.log('\n')
+            console.table(result)
+        }
+    )
+};
+
+// id INT AUTO_INCREMENT PRIMARY KEY,
+// title VARCHAR(30) NOT NULL,
+// salary DECIMAL NOT NULL,
+// department_id INT,
+
 
 init();
