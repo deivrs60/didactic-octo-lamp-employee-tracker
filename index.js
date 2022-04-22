@@ -87,16 +87,13 @@ const init = () => {
                     init();
                     break;
                 case "Add a department":
-                    AddDepartment();
-                    init();
+                    addDepartment();
                     break;
                 case "Add a role":
                     addRole();
-                    init;
                     break;
                 case "Add an employee":
                     addEmployee();
-                    init;
                     break;
                 case "Exit":
                     console.log("Thank you for using the Employee Tracker. Press Ctrl + C to return to the terminal.");
@@ -166,8 +163,8 @@ function addDepartment () {
         }
     ).then((data) => {
         sql =  `INSERT INTO department
-                VAUES (DEFAULT, '${data.addDepartment}');`
-        db.sql(sql, (err, res) => {
+                VALUES (DEFAULT, '${data.addDepartment}');`
+        db.query(sql, (err, res) => {
             if(err) console.log(err)
         });
         console.log(`${data.addDepartment} department added to the database.`)
