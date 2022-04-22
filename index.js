@@ -121,7 +121,7 @@ const viewDepartments = () => {
 
 // ROLE TABLE 
 const viewRoles = () => {
-    db.query(`SELECT role.id, role.title, role.salary 
+    db.query(`SELECT role.title, role.id, department.name, role.salary 
     FROM role
     LEFT JOIN department ON role.department_id = department.id;`,
         (err, result) => {
