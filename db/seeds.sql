@@ -24,5 +24,5 @@ INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
         (DEFAULT, 'Zeltzin', 'Martinez', 2, 1),
         (DEFAULT, 'Mel', 'Rivas', 3, 2),
         (DEFAULT, 'Yorj', 'Felix', 4, 3),
-        (DEFAULT, 'Gabe', 'Guzman', 5, 4),
+        (DEFAULT, 'Gabe', 'Guzman', 3, 4),
         (DEFAULT, 'Raven', 'Oliphant', 5, 4);

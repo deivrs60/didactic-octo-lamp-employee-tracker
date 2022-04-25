@@ -14,7 +14,7 @@ let managerId = null;
 // run the prep queries 
 function runQueries() {
     department = ['None'];
-    role = ['None'];
+    role = [];
     employeeArr = ['None'];
     employeeIds = [];
 
@@ -37,7 +37,7 @@ db.query(`SELECT title, id FROM role`, (err, res) => {
 })
 
 // retrieve employees 
-db.query(`SELECT * FROM employees;`, (err, res) => {
+db.query(`SELECT * FROM employee;`, (err, res) => {
     if(err) console.log(err);
     res.forEach(element => employeeArr.push(element.first_name + ' ' + element.last_name));
     employeeIds = res;
@@ -49,7 +49,7 @@ db.query(`SELECT * FROM employees;`, (err, res) => {
 
 
 const init = () => {
-    runQueries;
+    runQueries();
 
     // prompt user response to begin 
     let message = 'What would you like to do?';
@@ -60,7 +60,7 @@ const init = () => {
         'Add a department',
         'Add a role',
         'Add an employee',
-        'Update an Employee Role',
+        'Update an employee role',
         "Exit"
     ];
 
@@ -96,7 +96,7 @@ const init = () => {
                     addEmployee();
                     break;
                 case "Update an employee role":
-                    updateEmployee();
+                    updateEmployee ();
                     break;
                 case "Exit":
                     console.log("Thank you for using the Employee Tracker. Press Ctrl + C to return to the terminal.");
@@ -217,7 +217,7 @@ function addRole() {
             if(err) console.log(err)
             res.forEach( element => {
                 if(element.name === data.department) {
-                    departmentId = element.department_id
+                    departmentId = element.id
                     return;
                 }
             })  
@@ -276,7 +276,7 @@ function addEmployee () {
         roleInfo.forEach(element => {
             switch(data.role) {
                 case element.title:
-                    roleId = element.roleId
+                    roleId = element.id
                     break;
             }
         })
@@ -296,7 +296,10 @@ function addEmployee () {
 }
 
 function updateEmployee() {
+    console.log("banana");
     let employeeIdUpdate;
+
+    console.log("banana");
 
     return inquirer.prompt([ 
         {
@@ -311,7 +314,8 @@ function updateEmployee() {
             message: 'Please choose the employees new role.',
             choices: role
         }
-    ]).then(data => {
+    ])
+    .then(data => {
         roleInfo.forEach(element => {
             switch (data.newRole) {
                 case element.title:
@@ -324,7 +328,7 @@ function updateEmployee() {
             let caseString = element.first_name + ' ' + element.last_name;
             switch (data.employeeUpdate) {
                 case (caseString) :
-                    employeeUpdate = element.id;
+                    employeeIdUpdate = element.id;
                     break;
             }
         })
@@ -333,6 +337,7 @@ function updateEmployee() {
             if(err) console.log(err) 
         });
         console.log(`${data.employeeUpdate} role updated to ${data.newRole} and added to the database.`)
+        init();
     })
 
     
