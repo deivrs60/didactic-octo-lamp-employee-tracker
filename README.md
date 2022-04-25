@@ -19,7 +19,8 @@
   *[Questions](#questions)
 
 
-
+## Link to Video Walkthrough ##
+https://drive.google.com/file/d/1SED6sCFwifLqCK202V7e9cPZp0l5GfLA/view
 
   ## Description ##
   A command line application that uses MySQL2 and Inquirer in order to create a database for an employer that keeps track of their departments, roles, and employees. It also allows the option of viewing said options, as well adding a department, role and employee. Also allows for the option to update an existing employee!
